@@ -8,13 +8,29 @@ import {displayBoard, displayMessage, displayTextMessage}
  * @param {String} gameDescription - An encoded string of the game data.
  *    You have to parse to use it.
  */
+
+let state = {
+  boardSize: '',
+  players: []
+};
+
+
 export function selectGame(gameDescription) {
   // You may delete the following line as an example to see what the data looks like.
-  let size = Number(gameDescription.split(',')[0].split(':')[1]);
+  state.boardSize = Number(gameDescription.split(',')[0].split(':')[1]);
+  let playersCount = gameDescription.split('s:')[1];
+  let other = playersCount.replaceAll('{', '');
+  let otherOther = other.replaceAll('}', '');
+
+  let ships = otherOther.split(',');
+  
+  
+  console.log(ships);
+
   let board = [];
-  for(let i = 0;i<size;i++){
+  for(let i = 0;i<state.boardSize;i++){
     let boardIn = [];
-    for(let j = 0;j<size;j++){
+    for(let j = 0;j<state.boardSize;j++){
       boardIn.push('');
     }
     board.push(boardIn);
