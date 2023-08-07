@@ -10,6 +10,17 @@ import {displayBoard, displayMessage, displayTextMessage}
  */
 export function selectGame(gameDescription) {
   // You may delete the following line as an example to see what the data looks like.
+  let size = Number(gameDescription.split(',')[0].split(':')[1]);
+  let board = [];
+  for(let i = 0;i<size;i++){
+    let boardIn = [];
+    for(let j = 0;j<size;j++){
+      boardIn.push('');
+    }
+    board.push(boardIn);
+  }
+  displayBoard({boardNumber: 1, board: board});
+  displayBoard({boardNumber: 2, board: board});
   displayMessage(gameDescription, 'black');
 }
 
