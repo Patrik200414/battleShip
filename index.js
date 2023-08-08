@@ -15,13 +15,9 @@ function addAiShip(shipPositions){
   for(let ship in shipPositions){
     let row;
     let column;
-    for(let i = 0;i<shipPositions[ship].length;i++){
-      row = letters.indexOf(shipPositions[ship][i][0]);
-      column = Number(shipPositions[ship][i][1]);
-      console.log(row, column);
-      
+    for(let i = 0;i < shipPositions[ship].length;i++){
+
     }
-    state.board[row][column - 1] = ship;
   }
 }
 
@@ -39,6 +35,7 @@ function boardGenerator(boardSize){
 
   
   addAiShip(state.shipPositions.s);
+
   displayBoard({boardNumber: 1, board: board});
   displayBoard({boardNumber: 2, board: board});
 }
@@ -67,9 +64,17 @@ export function selectGame(gameDescription) {
 
   for(let ship of ships){
     let shipName = ship.split(':')[0];
-    state.shipPositions.s[shipName] = [ship.split(':')[1]];
+    let shipInfo = ship.split(':')[1];
+    let arr = [];
+    for(let i = 0;i<shipInfo.length;i++){
+      if(i % 2 == 0){
+        arr.push(`${shipInfo[i]}${shipInfo[i + 1]}`);
+      }
+    }
+    state.shipPositions.s[shipName] = [arr];
   }
-  console.log(state);
+
+  console.log(state.shipPositions);
   
   boardGenerator(state.boardSize);
   displayMessage(gameDescription, 'black');
@@ -85,7 +90,6 @@ export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(clickProperties.x + clickProperties.y +
                  clickProperties.clickType + clickProperties.source);
- console.log(clickProperties);
 }
 
 /**
