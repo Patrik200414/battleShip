@@ -18,6 +18,7 @@ function boardGenerator(boardSize){
     }
     board.push(boardIn);
   }
+  state.board = board
   displayBoard({boardNumber: 1, board: board});
   displayBoard({boardNumber: 2, board: board});
 }
@@ -26,11 +27,15 @@ function boardGenerator(boardSize){
 
 let state = {
   boardSize: '',
-  players: {
+  board: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
+  shipPositions: {
+    s:{},
+    p:{}
 
   }
 };
 
+// s:{s1:a1,s2:c4}
 
 export function selectGame(gameDescription) {
   // You may delete the following line as an example to see what the data looks like.
@@ -42,7 +47,7 @@ export function selectGame(gameDescription) {
 
   for(let ship of ships){
     let shipName = ship.split(':')[0];
-    state.players[shipName] = [ship.split(':')[1]];
+    state.shipPositions.s[shipName] = [ship.split(':')[1]];
   }
   console.log(state);
   
@@ -60,6 +65,7 @@ export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(clickProperties.x + clickProperties.y +
                  clickProperties.clickType + clickProperties.source);
+ console.log(clickProperties)                
 }
 
 /**
