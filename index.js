@@ -136,3 +136,4 @@ displayBoard({ boardNumber: 2, board:
 });
 displayMessage('message', 'green');
 displayTextMessage('text message', 'red');
+
