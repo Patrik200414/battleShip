@@ -9,6 +9,23 @@ import {displayBoard, displayMessage, displayTextMessage}
  *    You have to parse to use it.
  */
 
+
+function addAiShip(shipPositions){
+  let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  for(let ship in shipPositions){
+    let row;
+    let column;
+    for(let i = 0;i<shipPositions[ship].length;i++){
+      row = letters.indexOf(shipPositions[ship][i][0]);
+      column = Number(shipPositions[ship][i][1]);
+      console.log(row, column);
+      
+    }
+    state.board[row][column - 1] = ship;
+  }
+}
+
+
 function boardGenerator(boardSize){
   let board = [];
   for(let i = 0;i<boardSize;i++){
@@ -18,7 +35,10 @@ function boardGenerator(boardSize){
     }
     board.push(boardIn);
   }
-  state.board = board
+  state.board = board;
+
+  
+  addAiShip(state.shipPositions.s);
   displayBoard({boardNumber: 1, board: board});
   displayBoard({boardNumber: 2, board: board});
 }
