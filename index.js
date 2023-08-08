@@ -26,8 +26,9 @@ function boardGenerator(boardSize){
 
 let state = {
   boardSize: '',
-  players: {
-
+  shipPositions: {
+    s: {},
+    p: {}
   }
 };
 
@@ -42,7 +43,7 @@ export function selectGame(gameDescription) {
 
   for(let ship of ships){
     let shipName = ship.split(':')[0];
-    state.players[shipName] = [ship.split(':')[1]];
+    state.shipPositions.s[shipName] = [ship.split(':')[1]];
   }
   console.log(state);
   
@@ -60,6 +61,8 @@ export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(clickProperties.x + clickProperties.y +
                  clickProperties.clickType + clickProperties.source);
+
+  console.log(clickProperties);
 }
 
 /**
