@@ -9,9 +9,26 @@ import {displayBoard, displayMessage, displayTextMessage}
  *    You have to parse to use it.
  */
 
+function boardGenerator(boardSize){
+  let board = [];
+  for(let i = 0;i<boardSize;i++){
+    let boardIn = [];
+    for(let j = 0;j<boardSize;j++){
+      boardIn.push('');
+    }
+    board.push(boardIn);
+  }
+  displayBoard({boardNumber: 1, board: board});
+  displayBoard({boardNumber: 2, board: board});
+}
+
+
+
 let state = {
   boardSize: '',
-  players: []
+  players: {
+
+  }
 };
 
 
@@ -21,22 +38,15 @@ export function selectGame(gameDescription) {
   let playersCount = gameDescription.split('s:')[1];
   let other = playersCount.replaceAll('{', '');
   let otherOther = other.replaceAll('}', '');
-
   let ships = otherOther.split(',');
-  
-  
-  console.log(ships);
 
-  let board = [];
-  for(let i = 0;i<state.boardSize;i++){
-    let boardIn = [];
-    for(let j = 0;j<state.boardSize;j++){
-      boardIn.push('');
-    }
-    board.push(boardIn);
+  for(let ship of ships){
+    let shipName = ship.split(':')[0];
+    state.players[shipName] = [ship.split(':')[1]];
   }
-  displayBoard({boardNumber: 1, board: board});
-  displayBoard({boardNumber: 2, board: board});
+  console.log(state);
+  
+  boardGenerator(state.boardSize);
   displayMessage(gameDescription, 'black');
 }
 
@@ -57,15 +67,7 @@ export function handleClick(clickProperties) {
  */
 export function resetGame() {
   // You can delete the whole body of this function as an example.
-  const board = [];
-  for (let i = 0; i < 10; i++) {
-    board.push([]);
-    for (let j = 0; j < 10; j++) {
-      board[i].push('');
-    }
-  }
-  displayBoard({ boardNumber: 1, board: board });
-  displayBoard({ boardNumber: 2, board: board });
+  boardGenerator(10);
 }
 
 /**
