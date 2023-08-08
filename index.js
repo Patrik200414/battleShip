@@ -9,14 +9,32 @@ import {displayBoard, displayMessage, displayTextMessage}
  *    You have to parse to use it.
  */
 
+let state = {
+  boardSize: '',
+  board: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
+  shipPositions: {
+    s:{},
+    p:{}
+
+  }
+};
+
+
+
+
+
+
+
+
+
 
 function addAiShip(shipPositions){
   let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
   for(let ship in shipPositions){
-    let row;
-    let column;
-    for(let i = 0;i < shipPositions[ship].length;i++){
-
+    for(let i = 0; i < shipPositions[ship].length;i++){
+      let row = letters.indexOf(shipPositions[ship][i][0]);
+      let column = shipPositions[ship][i][1] - 1;
+      state.board[row][column] = ship;
     }
   }
 }
@@ -35,22 +53,11 @@ function boardGenerator(boardSize){
 
   
   addAiShip(state.shipPositions.s);
-
   displayBoard({boardNumber: 1, board: board});
   displayBoard({boardNumber: 2, board: board});
 }
 
 
-
-let state = {
-  boardSize: '',
-  board: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
-  shipPositions: {
-    s:{},
-    p:{}
-
-  }
-};
 
 // s:{s1:a1,s2:c4}
 
@@ -71,10 +78,8 @@ export function selectGame(gameDescription) {
         arr.push(`${shipInfo[i]}${shipInfo[i + 1]}`);
       }
     }
-    state.shipPositions.s[shipName] = [arr];
+    state.shipPositions.s[shipName] = arr;
   }
-
-  console.log(state.shipPositions);
   
   boardGenerator(state.boardSize);
   displayMessage(gameDescription, 'black');
