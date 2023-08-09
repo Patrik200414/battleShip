@@ -39,14 +39,14 @@ function isNextTo(xPos, yPos){
 }
 
 //Validation - Is the step within the board?
-function isOnBoard(xPos, yPos){
+/*function isOnBoard(xPos, yPos){
   let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
   let xPosNum = letters.indexOf(xPos.toLowerCase());
   let yPosNum = yPos - 1;
   if (xPosNum < state.boardPlayer.length - 1){
     return true
   }
-}
+}*/
 
 //Implement the handleClick function
 function definePlayerPosition(clickProperties){
@@ -126,6 +126,8 @@ export function selectGame(gameDescription) {
   displayBoard({boardNumber: 1, board: state.boardAi});
   displayMessage(gameDescription, 'black');
 }
+
+
 
 /**
  * Called whenever the player clicks on a cell.
