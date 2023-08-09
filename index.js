@@ -27,10 +27,19 @@ function isNextTo(xPos, yPos){
   let xPosNum = letters.indexOf(xPos.toLowerCase());
   let yPosNum = yPos - 1;
   // console.log(xPosNum, yPosNum)
+  /*
   if (!state.boardPlayer[xPosNum][yPosNum] && !state.boardPlayer[xPosNum-1][yPosNum]){
     console.log("Valami")
   }
+  */
 }
+
+
+
+
+
+
+
 
 function definePlayerPosition(clickProperties){
   state.clickCount++;
