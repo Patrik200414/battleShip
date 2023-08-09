@@ -11,7 +11,8 @@ import {displayBoard, displayMessage, displayTextMessage}
 
 let state = {
   boardSize: '',
-  board: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
+  boardAi: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
+  boardPlayer: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
   shipPositions: {
     s:{},
     p:{}
@@ -23,20 +24,17 @@ let state = {
 
 
 
-
-
-
-
-
-function addAiShip(shipPositions){
+function addAiShip(shipPositions, board){
   let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  let modifyBoard = board;
   for(let ship in shipPositions){
     for(let i = 0; i < shipPositions[ship].length;i++){
       let row = letters.indexOf(shipPositions[ship][i][0]);
       let column = shipPositions[ship][i][1] - 1;
-      state.board[row][column] = ship;
+      modifyBoard[row][column] = ship;
     }
   }
+  return modifyBoard;
 }
 
 
@@ -49,12 +47,7 @@ function boardGenerator(boardSize){
     }
     board.push(boardIn);
   }
-  state.board = board;
-
-  
-  addAiShip(state.shipPositions.s);
-  displayBoard({boardNumber: 1, board: board});
-  displayBoard({boardNumber: 2, board: board});
+  return board
 }
 
 
@@ -81,7 +74,11 @@ export function selectGame(gameDescription) {
     state.shipPositions.s[shipName] = arr;
   }
   
-  boardGenerator(state.boardSize);
+  state.boardAi = boardGenerator(state.boardSize);
+  state.boardPlayer = boardGenerator(state.boardSize);
+  state.boardAi = addAiShip(state.)
+  displayBoard({boardNumber: 1, board: state.boardPlayer});
+  displayBoard({boardNumber: 2, board: state.boardAi});
   displayMessage(gameDescription, 'black');
 }
 
