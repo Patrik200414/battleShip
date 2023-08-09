@@ -22,6 +22,15 @@ let state = {
   }
 };
 
+function isNextTo(xPos, yPos){
+  let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  let xPosNum = letters.indexOf(xPos.toLowerCase());
+  let yPosNum = yPos - 1;
+  // console.log(xPosNum, yPosNum)
+  if (!state.boardPlayer[xPosNum][yPosNum] && !state.boardPlayer[xPosNum-1][yPosNum]){
+    console.log("Valami")
+  }
+}
 
 function definePlayerPosition(clickProperties){
   state.clickCount++;
@@ -113,6 +122,8 @@ export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(clickProperties.x + clickProperties.y +
                  clickProperties.clickType + clickProperties.source);
+        
+    isNextTo(clickProperties.x, clickProperties.y);
   if(clickProperties.source === 2 && state.boardSize === 4 && state.clickCount < 2){
     definePlayerPosition(clickProperties);
   } else if(clickProperties.source === 2 && state.boardSize === 5 && state.clickCount < 3){
