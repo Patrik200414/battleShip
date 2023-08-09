@@ -15,8 +15,9 @@ let state = {
   boardPlayer: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
   shipPositions: {
     s:{},
-    p:{}
-
+    p:{
+      p1: []
+    }
   }
 };
 
@@ -76,12 +77,14 @@ export function selectGame(gameDescription) {
     }
     state.shipPositions.s[shipName] = arr;
   }
+  console.log()
   
   state.boardAi = boardGenerator(state.boardSize);
   state.boardPlayer = boardGenerator(state.boardSize);
   displayBoard({boardNumber: 1, board: state.boardAi});
   displayBoard({boardNumber: 2, board: state.boardPlayer});
   state.boardAi = addAiShip(state.shipPositions.s, state.boardAi);
+  console.log(document.querySelector('#mode').value);
   displayBoard({boardNumber: 1, board: state.boardAi});
   displayMessage(gameDescription, 'black');
 }
