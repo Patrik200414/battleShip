@@ -96,7 +96,9 @@ export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(clickProperties.x + clickProperties.y +
                  clickProperties.clickType + clickProperties.source);
-  console.log(clickProperties);
+  let clickInfoX = clickProperties.x.toLowerCase();
+  let clickInfoY = clickProperties.y;
+  console.log(clickInfoX, clickInfoY);
 }
 
 /**
