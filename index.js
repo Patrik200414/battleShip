@@ -27,12 +27,24 @@ let state = {
 
 //Validation - Can't place ship next to already existing ship on x, y
 function isNextTo(xPos, yPos){
-
   let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
   let xPosNum = letters.indexOf(xPos.toLowerCase());
   let yPosNum = yPos - 1;
   // console.log(xPosNum, yPosNum)
-  console.log(isOccupide(xPosNum, yPosNum));
+  if(isOccupide(xPosNum, yPosNum)){
+
+  }
+}
+
+
+
+function neighbors(xPosNum, yPosNum){
+  let cordinateArr = [];
+  let north = [xPosNum -1, yPosNum];
+  let east = [xPosNum, yPosNum + 1]; // nem lehet nagyobb mint a boardSize
+  let south = [xPosNum + 1, yPosNum]; // nem lehet nagyobb mint a boardSize
+  let west = [xPosNum, yPosNum - 1];
+  
 }
 
 //Validation - Is the step within the board?
