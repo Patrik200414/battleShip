@@ -47,7 +47,7 @@ function boardGenerator(boardSize){
     }
     board.push(boardIn);
   }
-  return board
+  return board;
 }
 
 
@@ -76,9 +76,10 @@ export function selectGame(gameDescription) {
   
   state.boardAi = boardGenerator(state.boardSize);
   state.boardPlayer = boardGenerator(state.boardSize);
-  state.boardAi = addAiShip(state.)
-  displayBoard({boardNumber: 1, board: state.boardPlayer});
-  displayBoard({boardNumber: 2, board: state.boardAi});
+  displayBoard({boardNumber: 1, board: state.boardAi});
+  displayBoard({boardNumber: 2, board: state.boardPlayer});
+  state.boardAi = addAiShip(state.shipPositions.s, state.boardAi);
+  displayBoard({boardNumber: 1, board: state.boardAi});
   displayMessage(gameDescription, 'black');
 }
 
