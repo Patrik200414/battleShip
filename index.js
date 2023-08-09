@@ -9,6 +9,9 @@ import {displayBoard, displayMessage, displayTextMessage}
  *    You have to parse to use it.
  */
 
+//Implementation of the selectGame function.
+
+//Empty board
 let state = {
   boardSize: '',
   boardAi: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
@@ -22,25 +25,39 @@ let state = {
   }
 };
 
+//Validation - Can't place ship next to already existing ship on x, y
 function isNextTo(xPos, yPos){
+
   let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
   let xPosNum = letters.indexOf(xPos.toLowerCase());
   let yPosNum = yPos - 1;
   // console.log(xPosNum, yPosNum)
-  /*
-  if (!state.boardPlayer[xPosNum][yPosNum] && !state.boardPlayer[xPosNum-1][yPosNum]){
-    console.log("Valami")
+  console.log(isOccupide(xPosNum, yPosNum));
+}
+
+//Validation - Is the step within the board?
+function isOnBoard(xPos, yPos){
+  let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  let xPosNum = letters.indexOf(xPos.toLowerCase());
+  let yPosNum = yPos - 1;
+  if (xPosNum < state.boardPlayer.length - 1){
+    return true
   }
-  */
+}
+
+
+function isOccupide(xPosNum, yPosNum){
+  if (state.boardPlayer[xPosNum][yPosNum] === ''){
+    return true;
+  } else {
+    return false;
+  }
 }
 
 
 
 
-
-
-
-
+//Implement the handleClick function
 function definePlayerPosition(clickProperties){
   state.clickCount++;
   let clickInfoX = clickProperties.x.toLowerCase();
@@ -52,9 +69,7 @@ function definePlayerPosition(clickProperties){
   displayBoard({boardNumber: 2, board: state.boardPlayer})
 }
 
-
-
-
+//Adding player steps to board
 function addShip(shipPositions, board){
   let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
   state.boardAi = boardGenerator(state.boardSize);
@@ -131,8 +146,8 @@ export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(clickProperties.x + clickProperties.y +
                  clickProperties.clickType + clickProperties.source);
-        
-    isNextTo(clickProperties.x, clickProperties.y);
+    
+  isNextTo(clickProperties.x, clickProperties.y);
   if(clickProperties.source === 2 && state.boardSize === 4 && state.clickCount < 2){
     definePlayerPosition(clickProperties);
   } else if(clickProperties.source === 2 && state.boardSize === 5 && state.clickCount < 3){
@@ -146,6 +161,7 @@ export function handleClick(clickProperties) {
 export function resetGame() {
   // You can delete the whole body of this function as an example.
   boardGenerator(10);
+  console.log()
 }
 
 /**
