@@ -27,12 +27,13 @@ let state = {
 
 //Validation - Can't place ship next to already existing ship on x, y
 function isNextTo(xPos, yPos){
-
+  
   let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
   let xPosNum = letters.indexOf(xPos.toLowerCase());
   let yPosNum = yPos - 1;
+
   // console.log(xPosNum, yPosNum)
-  console.log(isOccupide(xPosNum, yPosNum));
+  isOccupide(xPosNum, yPosNum)
 }
 
 //Validation - Is the step within the board?
@@ -50,6 +51,7 @@ function isOccupide(xPosNum, yPosNum){
   if (state.boardPlayer[xPosNum][yPosNum] === ''){
     return true;
   } else {
+    displayTextMessage('This placement is already occupied!')
     return false;
   }
 }
