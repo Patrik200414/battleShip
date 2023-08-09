@@ -13,6 +13,7 @@ let state = {
   boardSize: '',
   boardAi: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
   boardPlayer: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
+  clickCount: 0,
   shipPositions: {
     s:{},
     p:{
@@ -25,7 +26,7 @@ let state = {
 
 
 
-function addAiShip(shipPositions, board){
+function addShip(shipPositions, board){
   let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
   state.boardAi = boardGenerator(state.boardSize);
   let modifyBoard = board;
@@ -60,11 +61,14 @@ function boardGenerator(boardSize){
 
 export function selectGame(gameDescription) {
   // You may delete the following line as an example to see what the data looks like.
+  state.clickCount = 0;
+  state.shipPositions.p.p1 = [];
   state.boardSize = Number(gameDescription.split(',')[0].split(':')[1]);
   let playersCount = gameDescription.split('s:')[1];
   let other = playersCount.replaceAll('{', '');
   let otherOther = other.replaceAll('}', '');
   let ships = otherOther.split(',');
+  console.log(state);
 
   for(let ship of ships){
     let shipName = ship.split(':')[0];
@@ -83,8 +87,7 @@ export function selectGame(gameDescription) {
   state.boardPlayer = boardGenerator(state.boardSize);
   displayBoard({boardNumber: 1, board: state.boardAi});
   displayBoard({boardNumber: 2, board: state.boardPlayer});
-  state.boardAi = addAiShip(state.shipPositions.s, state.boardAi);
-  console.log(document.querySelector('#mode').value);
+  state.boardAi = addShip(state.shipPositions.s, state.boardAi);
   displayBoard({boardNumber: 1, board: state.boardAi});
   displayMessage(gameDescription, 'black');
 }
@@ -99,9 +102,16 @@ export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(clickProperties.x + clickProperties.y +
                  clickProperties.clickType + clickProperties.source);
-  let clickInfoX = clickProperties.x.toLowerCase();
-  let clickInfoY = clickProperties.y;
-  console.log(clickInfoX, clickInfoY);
+  if(clickProperties.source === 2 && state.boardSize === 4 && state.clickCount < 2){
+    state.clickCount++;
+    let clickInfoX = clickProperties.x.toLowerCase();
+    let clickInfoY = clickProperties.y;
+    let emptyArray = `${clickInfoX}${clickInfoY}`;
+    state.shipPositions.p.p1.push(emptyArray);
+    console.log(state.shipPositions.p);
+    addShip(state.shipPositions.p, state.boardPlayer)
+    displayBoard({boardNumber: 2, board: state.boardPlayer})
+  }
 }
 
 /**
