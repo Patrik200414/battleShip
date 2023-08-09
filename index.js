@@ -33,7 +33,30 @@ function isNextTo(xPos, yPos){
   let yPosNum = yPos - 1;
 
   // console.log(xPosNum, yPosNum)
-  isOccupide(xPosNum, yPosNum)
+  if(isOccupide(xPosNum, yPosNum)){
+    let isNeighbersFree = true;
+    for(let item of neighbors(xPosNum, yPosNum)){
+      if(isOccupide(item[0], item[1]) === false){
+        isNeighbersFree = false;
+      }
+    }
+    return isNeighbersFree;
+  } else{
+    return false;
+  }
+}
+
+
+
+function neighbors(xPosNum, yPosNum){
+  let cordinateArr = [[xPosNum -1, yPosNum], [xPosNum, yPosNum + 1], [xPosNum + 1, yPosNum], [xPosNum, yPosNum - 1]];
+  let rtn = [];
+  for(let i = 0;i < cordinateArr.length; i++){
+    if(!cordinateArr[i].includes(-1) && !cordinateArr[i].includes(state.boardSize)){
+      rtn.push(cordinateArr[i]);
+    }
+  }
+  return rtn;
 }
 
 //Validation - Is the step within the board?
@@ -66,7 +89,6 @@ function definePlayerPosition(clickProperties){
   let clickInfoY = clickProperties.y;
   let emptyArray = `${clickInfoX}${clickInfoY}`;
   state.shipPositions.p.p1.push(emptyArray);
-  console.log(state.shipPositions.p);
   addShip(state.shipPositions.p, state.boardPlayer)
   displayBoard({boardNumber: 2, board: state.boardPlayer})
 }
@@ -76,7 +98,6 @@ function addShip(shipPositions, board){
   let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
   state.boardAi = boardGenerator(state.boardSize);
   let modifyBoard = board;
-  console.log(state.boardAi);
   for(let ship in shipPositions){
     for(let i = 0; i < shipPositions[ship].length;i++){
       let row = letters.indexOf(shipPositions[ship][i][0]);
@@ -114,7 +135,6 @@ export function selectGame(gameDescription) {
   let other = playersCount.replaceAll('{', '');
   let otherOther = other.replaceAll('}', '');
   let ships = otherOther.split(',');
-  console.log(state);
 
   for(let ship of ships){
     let shipName = ship.split(':')[0];
@@ -127,7 +147,6 @@ export function selectGame(gameDescription) {
     }
     state.shipPositions.s[shipName] = arr;
   }
-  console.log()
   
   state.boardAi = boardGenerator(state.boardSize);
   state.boardPlayer = boardGenerator(state.boardSize);
@@ -151,10 +170,10 @@ export function handleClick(clickProperties) {
   displayMessage(clickProperties.x + clickProperties.y +
                  clickProperties.clickType + clickProperties.source);
     
-  isNextTo(clickProperties.x, clickProperties.y);
-  if(clickProperties.source === 2 && state.boardSize === 4 && state.clickCount < 2){
+  let canYouPutShip = isNextTo(clickProperties.x, clickProperties.y);
+  if(clickProperties.source === 2 && state.boardSize === 4 && state.clickCount < 2 && canYouPutShip){
     definePlayerPosition(clickProperties);
-  } else if(clickProperties.source === 2 && state.boardSize === 5 && state.clickCount < 3){
+  } else if(clickProperties.source === 2 && state.boardSize === 5 && state.clickCount < 3 && canYouPutShip){
     definePlayerPosition(clickProperties);
   }
 }
