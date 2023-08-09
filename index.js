@@ -23,6 +23,17 @@ let state = {
 };
 
 
+function definePlayerPosition(clickProperties){
+  state.clickCount++;
+  let clickInfoX = clickProperties.x.toLowerCase();
+  let clickInfoY = clickProperties.y;
+  let emptyArray = `${clickInfoX}${clickInfoY}`;
+  state.shipPositions.p.p1.push(emptyArray);
+  console.log(state.shipPositions.p);
+  addShip(state.shipPositions.p, state.boardPlayer)
+  displayBoard({boardNumber: 2, board: state.boardPlayer})
+}
+
 
 
 
@@ -103,14 +114,9 @@ export function handleClick(clickProperties) {
   displayMessage(clickProperties.x + clickProperties.y +
                  clickProperties.clickType + clickProperties.source);
   if(clickProperties.source === 2 && state.boardSize === 4 && state.clickCount < 2){
-    state.clickCount++;
-    let clickInfoX = clickProperties.x.toLowerCase();
-    let clickInfoY = clickProperties.y;
-    let emptyArray = `${clickInfoX}${clickInfoY}`;
-    state.shipPositions.p.p1.push(emptyArray);
-    console.log(state.shipPositions.p);
-    addShip(state.shipPositions.p, state.boardPlayer)
-    displayBoard({boardNumber: 2, board: state.boardPlayer})
+    definePlayerPosition(clickProperties);
+  } else if(clickProperties.source === 2 && state.boardSize === 5 && state.clickCount < 3){
+    definePlayerPosition(clickProperties);
   }
 }
 
