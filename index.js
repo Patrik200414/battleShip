@@ -27,15 +27,12 @@ let state = {
 
 //Validation - Can't place ship next to already existing ship on x, y
 function isNextTo(xPos, yPos){
-{
+
   let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
   let xPosNum = letters.indexOf(xPos.toLowerCase());
   let yPosNum = yPos - 1;
   // console.log(xPosNum, yPosNum)
-  if (!state.boardPlayer[xPosNum][yPosNum] && !state.boardPlayer[xPosNum-1][yPosNum]){
-    console.log("Valami")
-  }
-}
+  console.log(isOccupide(xPosNum, yPosNum));
 }
 
 //Validation - Is the step within the board?
@@ -47,6 +44,18 @@ function isNextTo(xPos, yPos){
     return true
   }
 }*/
+
+
+function isOccupide(xPosNum, yPosNum){
+  if (state.boardPlayer[xPosNum][yPosNum] === ''){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+
 
 //Implement the handleClick function
 function definePlayerPosition(clickProperties){
@@ -140,7 +149,7 @@ export function handleClick(clickProperties) {
   displayMessage(clickProperties.x + clickProperties.y +
                  clickProperties.clickType + clickProperties.source);
     
-    console.log(isOnBoard(clickProperties.x, clickProperties.y));
+  isNextTo(clickProperties.x, clickProperties.y);
   if(clickProperties.source === 2 && state.boardSize === 4 && state.clickCount < 2){
     definePlayerPosition(clickProperties);
   } else if(clickProperties.source === 2 && state.boardSize === 5 && state.clickCount < 3){
