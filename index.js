@@ -26,7 +26,9 @@ let state = {
 
 function addAiShip(shipPositions, board){
   let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  state.boardAi = boardGenerator(state.boardSize);
   let modifyBoard = board;
+  console.log(state.boardAi);
   for(let ship in shipPositions){
     for(let i = 0; i < shipPositions[ship].length;i++){
       let row = letters.indexOf(shipPositions[ship][i][0]);
@@ -34,6 +36,7 @@ function addAiShip(shipPositions, board){
       modifyBoard[row][column] = ship;
     }
   }
+  
   return modifyBoard;
 }
 
@@ -93,8 +96,14 @@ export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(clickProperties.x + clickProperties.y +
                  clickProperties.clickType + clickProperties.source);
+<<<<<<< HEAD
   
   
+=======
+  let clickInfoX = clickProperties.x.toLowerCase();
+  let clickInfoY = clickProperties.y;
+  console.log(clickInfoX, clickInfoY);
+>>>>>>> f1d8afa494db0106d2dc540d16cb6c5283c8934c
 }
 
 /**
