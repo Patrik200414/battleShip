@@ -13,6 +13,7 @@ import {displayBoard, displayMessage, displayTextMessage}
 
 //Empty board
 let state = {
+  awaibleClicks: 0,
   boardSize: '',
   boardAi: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
   boardPlayer: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
@@ -33,10 +34,10 @@ function isNextTo(xPos, yPos){
   let yPosNum = yPos - 1;
   
   // console.log(xPosNum, yPosNum)
-  if(isOccupide(xPosNum, yPosNum)){
+  if(isOccupide(xPosNum, yPosNum, state.boardPlayer)){
     let isNeighbersFree = true;
     for(let item of neighbors(xPosNum, yPosNum)){
-      if(isOccupide(item[0], item[1]) === false){
+      if(isOccupide(item[0], item[1], state.boardPlayer) === false){
         isNeighbersFree = false;
         displayMessagesForTime('You cant put a ship next to an already existing ship!', 600);
       }
@@ -46,6 +47,20 @@ function isNextTo(xPos, yPos){
     displayMessagesForTime('This placement is already occupied!', 600)
     return false;
   }
+}
+
+
+function playerShoot(xPos, yPos){
+  let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  let xPosNum = letters.indexOf(xPos.toLowerCase());
+  let yPosNum = yPos - 1;
+
+  console.log(xPosNum, yPosNum);
+}
+
+function converter(pos){
+  let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  return letters.indexOf(pos.toLowerCase());
 }
 
 
@@ -63,14 +78,20 @@ function neighbors(xPosNum, yPosNum){
 }
 
 //Validation - Is the step within the board?
-/*function isOnBoard(xPos, yPos){
-  let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+function isOnBoard(xPos, yPos){
+  let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'].splice(0, state.boardSize);
   let xPosNum = letters.indexOf(xPos.toLowerCase());
-  let yPosNum = yPos - 1;
+  let yPosNum = yPos;
+  if(xPosNum !== -1 && yPosNum < state.boardSize){
+    return [xPosNum, yPosNum];
+  }
+  
+  /*
   if (xPosNum < state.boardPlayer.length - 1){
     return true
   }
-}*/
+  */
+}
 
 function displayMessagesForTime (text, duration){
   displayTextMessage(text)
@@ -80,7 +101,7 @@ function displayMessagesForTime (text, duration){
 }
 
 function isOccupide(xPosNum, yPosNum, board){
-  if (state.boardPlayer[xPosNum][yPosNum] === ''){
+  if (board[xPosNum][yPosNum] === ''){
     return true;
   } else {
     return false;
@@ -88,6 +109,19 @@ function isOccupide(xPosNum, yPosNum, board){
 }
 
 function reset (){
+  /*
+  boardSize: '',
+  boardAi: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
+  boardPlayer: [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
+  clickCount: 0,
+  shipPositions: {
+    s:{},
+    p:{
+      p1: []
+    }
+  }
+  */;
+
   state.boardAi = boardGenerator(state.boardSize);
   state.boardPlayer = boardGenerator(state.boardSize);
   state.clickCount = 0;
@@ -96,7 +130,7 @@ function reset (){
     p:{
       p1: []
     }
-  }
+  };
 }
 
 
@@ -128,6 +162,16 @@ function addShip(shipPositions, board){
 }
 
 
+
+function clickCountBasedOnAiShips(ships){
+  let clickCount = 0;
+  for(let ship in ships){
+   clickCount += ships[ship].length;
+  }
+  return clickCount;
+}
+
+
 function boardGenerator(boardSize){
   let board = [];
   for(let i = 0;i<boardSize;i++){
@@ -146,8 +190,7 @@ function boardGenerator(boardSize){
 
 export function selectGame(gameDescription) {
   // You may delete the following line as an example to see what the data looks like.
-  state.clickCount = 0;
-  state.shipPositions.p.p1 = [];
+  reset();
   state.boardSize = Number(gameDescription.split(',')[0].split(':')[1]);
   let playersCount = gameDescription.split('s:')[1];
   let other = playersCount.replaceAll('{', '');
@@ -188,22 +231,24 @@ export function handleClick(clickProperties) {
   displayMessage(clickProperties.x + clickProperties.y +
     clickProperties.clickType + clickProperties.source);
     
-    let canYouPutShip = isNextTo(clickProperties.x, clickProperties.y);
-    if(clickProperties.source === 2 && state.boardSize === 4 && state.clickCount < 2 && canYouPutShip){
-      definePlayerPosition(clickProperties);
-    } else if(clickProperties.source === 2 && state.boardSize === 5 && state.clickCount < 3 && canYouPutShip){
-      definePlayerPosition(clickProperties);
-    }
-  }
-  
-  /**
+  let canYouPutShip = isNextTo(clickProperties.x, clickProperties.y);
+  state.awaibleClicks = clickCountBasedOnAiShips(state.shipPositions.s);
+
+  if(clickProperties.source === 2 && state.clickCount < state.awaibleClicks && canYouPutShip){
+    definePlayerPosition(clickProperties);
+  } 
+}
+
+/**
  * Called when the player clicks on the reset game button.
  */
 export function resetGame() {
   // You can delete the whole body of this function as an example.
-  reset()
-  displayBoard({ boardNumber: 1, board: state.boardAi})
-  displayBoard({ boardNumber: 2, board: state.boardPlayer})
+  setInterval(() => displayTextMessage('text messege'), 2000);
+  displayTextMessage('You have reset the board!')
+  reset();
+  displayBoard({boardNumber: 1, board: state.boardAi});
+  displayBoard({boardNumber: 2, board: state.boardAi});
 }
 
 /**
@@ -216,6 +261,11 @@ export function resetGame() {
 export function aiShoot(coordinates) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(coordinates.x + coordinates.y);
+  let aiHits = isOnBoard(coordinates.x, coordinates.y);
+  if(aiHits && state.boardPlayer[aiHits[0]][aiHits[1]] === 'p1'){
+    state.boardPlayer[aiHits[0]][aiHits[1]] = 'X';
+    displayBoard({boardNumber: 2, board: state.boardPlayer})
+  }
 }
 
 
