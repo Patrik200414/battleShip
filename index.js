@@ -34,10 +34,10 @@ function isNextTo(xPos, yPos){
   let yPosNum = yPos - 1;
 
   // console.log(xPosNum, yPosNum)
-  if(isOccupide(xPosNum, yPosNum)){
+  if(isOccupide(xPosNum, yPosNum, state.boardPlayer)){
     let isNeighbersFree = true;
     for(let item of neighbors(xPosNum, yPosNum)){
-      if(isOccupide(item[0], item[1]) === false){
+      if(isOccupide(item[0], item[1], state.boardPlayer) === false){
         isNeighbersFree = false;
       }
     }
@@ -45,6 +45,20 @@ function isNextTo(xPos, yPos){
   } else{
     return false;
   }
+}
+
+
+function playerShoot(xPos, yPos){
+  let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  let xPosNum = letters.indexOf(xPos.toLowerCase());
+  let yPosNum = yPos - 1;
+
+  console.log(xPosNum, yPosNum);
+}
+
+function converter(pos){
+  let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  return letters.indexOf(pos.toLowerCase());
 }
 
 
@@ -77,8 +91,8 @@ function isOnBoard(xPos, yPos){
 }
 
 
-function isOccupide(xPosNum, yPosNum){
-  if (state.boardPlayer[xPosNum][yPosNum] === ''){
+function isOccupide(xPosNum, yPosNum, board){
+  if (board[xPosNum][yPosNum] === ''){
     return true;
   } else {
     setInterval(() => {
@@ -217,9 +231,7 @@ export function handleClick(clickProperties) {
 
   if(clickProperties.source === 2 && state.clickCount < state.awaibleClicks && canYouPutShip){
     definePlayerPosition(clickProperties);
-  } else if(clickProperties.source === 1){
-    
-  }
+  } 
 }
 
 /**
