@@ -55,7 +55,7 @@ function playerShoot(xPos, yPos){
   let xPosNum = letters.indexOf(xPos.toLowerCase());
   let yPosNum = yPos - 1;
 
-  console.log(xPosNum, yPosNum);
+  return[xPosNum, yPosNum]
 }
 
 function converter(pos){
@@ -196,7 +196,7 @@ export function selectGame(gameDescription) {
   let other = playersCount.replaceAll('{', '');
   let otherOther = other.replaceAll('}', '');
   let ships = otherOther.split(',');
-  
+
   for(let ship of ships){
     let shipName = ship.split(':')[0];
     let shipInfo = ship.split(':')[1];
@@ -208,7 +208,7 @@ export function selectGame(gameDescription) {
     }
     state.shipPositions.s[shipName] = arr;
   }
-  
+
   state.boardAi = boardGenerator(state.boardSize);
   state.boardPlayer = boardGenerator(state.boardSize);
   displayBoard({boardNumber: 1, board: state.boardAi});
@@ -228,15 +228,24 @@ export function selectGame(gameDescription) {
 */
 export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
+  
   displayMessage(clickProperties.x + clickProperties.y +
     clickProperties.clickType + clickProperties.source);
+
+    addShip(state.shipPositions.s, state.boardAi);
     
   let canYouPutShip = isNextTo(clickProperties.x, clickProperties.y);
   state.awaibleClicks = clickCountBasedOnAiShips(state.shipPositions.s);
+  let currentAiBoard = [state.boardAi];
+
+  let x = playerShoot(clickProperties.x, clickProperties.y)[0];
+  let y = playerShoot(clickProperties.x, clickProperties.y)[1];
 
   if(clickProperties.source === 2 && state.clickCount < state.awaibleClicks && canYouPutShip){
     definePlayerPosition(clickProperties);
-  } 
+  } else if(clickProperties.source === 1 && isOccupide(x, y, state.boardAi)){
+    console.log(state.boardAi)
+  }
 }
 
 /**
@@ -244,11 +253,10 @@ export function handleClick(clickProperties) {
  */
 export function resetGame() {
   // You can delete the whole body of this function as an example.
-  setInterval(() => displayTextMessage('text messege'), 2000);
-  displayTextMessage('You have reset the board!')
+  displayMessagesForTime('You have reset the game!', 2000)
   reset();
   displayBoard({boardNumber: 1, board: state.boardAi});
-  displayBoard({boardNumber: 2, board: state.boardAi});
+  displayBoard({boardNumber: 2, board: state.boardPlayer});
 }
 
 /**
