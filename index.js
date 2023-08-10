@@ -31,20 +31,23 @@ function isNextTo(xPos, yPos){
   let letters = ['a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
   let xPosNum = letters.indexOf(xPos.toLowerCase());
   let yPosNum = yPos - 1;
-
+  
   // console.log(xPosNum, yPosNum)
   if(isOccupide(xPosNum, yPosNum)){
     let isNeighbersFree = true;
     for(let item of neighbors(xPosNum, yPosNum)){
       if(isOccupide(item[0], item[1]) === false){
         isNeighbersFree = false;
+        displayMessagesForTime('You cant put a ship next to an already existing ship!', 600);
       }
     }
     return isNeighbersFree;
-  } else{
+  } else {
+    displayMessagesForTime('This placement is already occupied!', 600)
     return false;
   }
 }
+
 
 
 
@@ -69,21 +72,31 @@ function neighbors(xPosNum, yPosNum){
   }
 }*/
 
+function displayMessagesForTime (text, duration){
+  displayTextMessage(text)
+  setTimeout(() => {
+    displayTextMessage('');
+  }, duration);
+}
 
-function isOccupide(xPosNum, yPosNum){
+function isOccupide(xPosNum, yPosNum, board){
   if (state.boardPlayer[xPosNum][yPosNum] === ''){
     return true;
   } else {
-    setInterval(() => {
-      displayTextMessage('This placement is already occupied!')
-    }, 1000);
-    displayTextMessage('message')
     return false;
   }
 }
 
 function reset (){
-  
+  state.boardAi = boardGenerator(state.boardSize);
+  state.boardPlayer = boardGenerator(state.boardSize);
+  state.clickCount = 0;
+  state.shipPositions = {
+    s:{},
+    p:{
+      p1: []
+    }
+  }
 }
 
 
@@ -140,7 +153,7 @@ export function selectGame(gameDescription) {
   let other = playersCount.replaceAll('{', '');
   let otherOther = other.replaceAll('}', '');
   let ships = otherOther.split(',');
-
+  
   for(let ship of ships){
     let shipName = ship.split(':')[0];
     let shipInfo = ship.split(':')[1];
@@ -169,27 +182,28 @@ export function selectGame(gameDescription) {
  * @param {Object} clickProperties - The clicked cell's properties.
  *    It contains x and y coordinates, clickType that can be 'left' or 'right',
  *    and source that indicates the number of the board where the click happened.
- */
+*/
 export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(clickProperties.x + clickProperties.y +
-                 clickProperties.clickType + clickProperties.source);
+    clickProperties.clickType + clickProperties.source);
     
-  let canYouPutShip = isNextTo(clickProperties.x, clickProperties.y);
-  if(clickProperties.source === 2 && state.boardSize === 4 && state.clickCount < 2 && canYouPutShip){
-    definePlayerPosition(clickProperties);
-  } else if(clickProperties.source === 2 && state.boardSize === 5 && state.clickCount < 3 && canYouPutShip){
-    definePlayerPosition(clickProperties);
+    let canYouPutShip = isNextTo(clickProperties.x, clickProperties.y);
+    if(clickProperties.source === 2 && state.boardSize === 4 && state.clickCount < 2 && canYouPutShip){
+      definePlayerPosition(clickProperties);
+    } else if(clickProperties.source === 2 && state.boardSize === 5 && state.clickCount < 3 && canYouPutShip){
+      definePlayerPosition(clickProperties);
+    }
   }
-}
-
-/**
+  
+  /**
  * Called when the player clicks on the reset game button.
  */
 export function resetGame() {
   // You can delete the whole body of this function as an example.
-  boardGenerator(10);
-  
+  reset()
+  displayBoard({ boardNumber: 1, board: state.boardAi})
+  displayBoard({ boardNumber: 2, board: state.boardPlayer})
 }
 
 /**
@@ -221,6 +235,6 @@ displayBoard({ boardNumber: 1, board:
 displayBoard({ boardNumber: 2, board:
   [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
 });
-displayMessage('message', 'green');
-displayTextMessage('text message', 'red');
+//displayMessage('message', 'green');
+//displayTextMessage('text message', 'red');
 
