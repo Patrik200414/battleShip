@@ -74,12 +74,17 @@ function isOccupide(xPosNum, yPosNum){
   if (state.boardPlayer[xPosNum][yPosNum] === ''){
     return true;
   } else {
-    displayTextMessage('This placement is already occupied!')
+    setInterval(() => {
+      displayTextMessage('This placement is already occupied!')
+    }, 1000);
+    displayTextMessage('message')
     return false;
   }
 }
 
-
+function reset (){
+  
+}
 
 
 //Implement the handleClick function
@@ -184,7 +189,7 @@ export function handleClick(clickProperties) {
 export function resetGame() {
   // You can delete the whole body of this function as an example.
   boardGenerator(10);
-  console.log()
+  
 }
 
 /**
